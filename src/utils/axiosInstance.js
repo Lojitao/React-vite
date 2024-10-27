@@ -3,7 +3,7 @@ import axios from 'axios'
 
 //1.根域名配置/超時時間
 const axiosInstance = axios.create({
-  baseURL:'',
+  baseURL:'http://localhost:3039',
   timeout:5000
 })
 

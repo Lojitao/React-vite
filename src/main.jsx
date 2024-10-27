@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client'
 // import '@/index.css'
 
 import { Provider } from 'react-redux'//引入reduex
+import store from './store' // 引入 Redux store，請確認路徑是否正確
 
 import {RouterProvider} from 'react-router-dom';//引入router provider
 import router from '@/router'//引入router配置檔案
