@@ -48,6 +48,9 @@ const Login = ()=>{
             <Form.Item>
               <Button type="primary" htmlType="submit" size="large" block>登入</Button>
             </Form.Item>
+
+            <button className='text-red'>哈哈</button>
+            <p>scasc</p>
           </Form>
         </Card>
       </div>

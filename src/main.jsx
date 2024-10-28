@@ -1,5 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import 'uno.css'; // 导入 uno.css
 // import App from './App.jsx'
 // import '@/index.css'
 
