@@ -17,7 +17,7 @@ const userStore = createSlice({
 
 //異步處理
 const fetchLogin = (loginForm)=>{
-  return async(dispatch)=>{
+  return async(dispatch)=>{ 
     const res = await httpApis.user.LoginAPI(loginForm)
     dispatch(setToken(res.data))
   }
