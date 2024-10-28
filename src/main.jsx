@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+// import { StrictMode } from 'react'//嚴格模式會讓api重覆請求兩次
 import { createRoot } from 'react-dom/client'
 import 'uno.css'; // 导入 uno.css
 // import App from './App.jsx'
@@ -11,9 +11,9 @@ import {RouterProvider} from 'react-router-dom';//引入router provider
 import router from '@/router'//引入router配置檔案
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode> 
+  // <StrictMode> 
     <Provider store={store}>
       <RouterProvider router={router}/>
     </Provider>
-  </StrictMode>
+  // </StrictMode>
 )

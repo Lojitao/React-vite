@@ -21,8 +21,7 @@ const Login = ()=>{
         <Card className="login-container">
           {/* 登录表单 */}
           <Form onFinish={login} validateTrigger="onBlur">
-            <Form.Item
-              name="login"
+            <Form.Item name="login"
               rules={[
                {
                 required:true,
@@ -33,8 +32,7 @@ const Login = ()=>{
               <Input size="large" placeholder="請輸入帳號" />
             </Form.Item>
 
-            <Form.Item
-              name="password"
+            <Form.Item name="password"
               rules={[
                {
                 required:true,
@@ -48,9 +46,6 @@ const Login = ()=>{
             <Form.Item>
               <Button type="primary" htmlType="submit" size="large" block>登入</Button>
             </Form.Item>
-
-            <button className='text-red'>哈哈</button>
-            <p>scasc</p>
           </Form>
         </Card>
       </div>

@@ -1,16 +1,17 @@
 //用戶相關的狀態管理
 import { createSlice } from '@reduxjs/toolkit'
 import httpApis from '@/apis'
+import { setCookie , getCookie } from "@/utils"
 
 const userStore = createSlice({
   name:'user',
   initialState:{//數據狀態
-    token:'',
+    token:getCookie('token') || '',
   },
-  //同步修改方法
-  reducers:{
+  reducers:{//同步修改方法
     setToken(state,action){
       state.token = action.payload
+      setCookie('token',action.payload)//數據持久化,使用cookie存入token
     }
   }
 })

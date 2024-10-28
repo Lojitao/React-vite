@@ -1,8 +1,10 @@
 import user from './user'
+import course from './course'
 
 
 const httpApis = {
-  user
+  user,
+  course
 }
 
 export default httpApis

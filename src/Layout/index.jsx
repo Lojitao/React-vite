@@ -1,6 +1,6 @@
-import { Outlet } from 'react-router-dom';
-
+import { Outlet, useNavigate , useLocation } from 'react-router-dom';
 import { Layout,Menu } from"antd"
+
 const { Header, Content, Footer, Sider } = Layout;
 
 const items = [
@@ -15,12 +15,30 @@ const items = [
 ]
 
 const LayoutPage = ()=>{
+  const navigate = useNavigate()
+  
+  const location = useLocation()
+  const selectedKey = location.pathname
+
+  function routerHandle(route){
+    const path = route.key   
+    navigate(path)
+    // console.log('asdsad',route);
+  }
+
+  //獲取當前路徑
+
+
   return (
     <>
       <div className='flex'>
         <Sider>
           <div className="demo-logo-vertical" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']} items={items} />
+          <Menu onClick={routerHandle}
+            selectedKeys={selectedKey}
+            items={items} 
+            theme="dark" mode="inline"  
+          />
         </Sider>
         <div className="w-full bg-red h-100vh">
           <Outlet />
