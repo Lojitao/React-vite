@@ -3,6 +3,7 @@ import LayoutPage from "@/Layout";
 import Login from "@/pages/Login";
 import Home from "@/pages/Home";
 import List from "@/pages/List";
+import ProtectedRoute from "./protectedRoute"; // 引入 ProtectedRoute
 
 //引入router函數
 import {createBrowserRouter} from "react-router-dom"
@@ -15,7 +16,12 @@ const router = createBrowserRouter([
   },
   {
     path:"/",
-    element:<LayoutPage />,
+    // element:<LayoutPage />,
+    element: (
+      <ProtectedRoute> {/* 保護整個 LayoutPage */}
+        <LayoutPage />
+      </ProtectedRoute>
+    ),
     children:[
       {
         index: true ,

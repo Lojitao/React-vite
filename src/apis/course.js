@@ -2,18 +2,20 @@ import  { axiosInstance } from '@/utils/axiosInstance'
 
 
 const user = {
-  GetLists(params){
+  GetLists(params,allowGlobalErrorHandling = true){
     return axiosInstance({
       url:"/admin/courses",
       method:'GET',
-      params
+      params,
+      allowGlobalErrorHandling
     })
   },
-  AddCourse(data){
+  AddCourse(data,allowGlobalErrorHandling = true){
     return axiosInstance({
       url:"/admin/courses",
       method:'POST',
-      data
+      data,
+      allowGlobalErrorHandling
     })
   }
 }

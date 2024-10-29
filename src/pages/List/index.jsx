@@ -1,8 +1,10 @@
 import { Radio,Input,InputNumber,Upload,Select, message,Breadcrumb,Card ,Form,Checkbox,Space, Table, Tag,Modal ,Button} from "antd"
-const { Column, ColumnGroup } = Table;
 import { useState,useEffect } from "react"
-import { Link } from "react-router-dom"
 import httpApis from '@/apis'
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+const { Column, ColumnGroup } = Table;
+const MySwal = withReactContent(Swal);
 
 
 //渲染後取得資料
@@ -52,8 +54,10 @@ const List = ()=>{
           value:res.id
         }
       })
-      console.log('options',options);
-      
+      options.push({
+        label:'假類別',
+        value:9999
+      })    
       setCategoryOptions(options);
     };
 
@@ -89,20 +93,30 @@ const List = ()=>{
     const values = await validateForm();
     
     if (values){
-      const res = await httpApis.course.AddCourse(values);
-      if(res.status===201){
-        message.success('新增成功！');
-        loadLists()
+      try{
+        const res = await httpApis.course.AddCourse(values,false);
+        if(res.status===201){
+          message.success('新增成功！');
+          loadLists()
+        }
+        toggleModal(false); // 關閉 Modal
+        form.resetFields(); // 重置表單
+        MySwal.fire({
+          title: '新增成功！',
+          text: '課程已成功新增。',
+          icon: 'success',
+          timer: 2000,           
+          timerProgressBar: true,  
+          showConfirmButton: false
+        })
+        
+      }catch(error){
+        console.log('error',error);
       }
-      form.resetFields(); // 重置表單
-      toggleModal(false); // 關閉 Modal
+      
     } 
   }
 
-
-  function handleChange(){
-
-  }
 
   return (
   <>
@@ -151,7 +165,6 @@ const List = ()=>{
           <Select
             placeholder="請選擇類別"
             style={{width: 120}}
-            onChange={handleChange}
             options={categoryOptions}
           />
         </Form.Item>
