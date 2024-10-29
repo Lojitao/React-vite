@@ -1,4 +1,4 @@
-import { Radio,Input,InputNumber,Upload, Breadcrumb,Card ,Form,Checkbox,Space, Table, Tag} from "antd"
+import { Radio,Input,InputNumber,Upload,Select, message,Breadcrumb,Card ,Form,Checkbox,Space, Table, Tag,Modal ,Button} from "antd"
 const { Column, ColumnGroup } = Table;
 import { useState,useEffect } from "react"
 import { Link } from "react-router-dom"
@@ -36,23 +36,77 @@ const data = [
 
 const List = ()=>{
   const [lists,setLists] = useState([])
+  const [categoryOptions,setCategoryOptions] = useState([])
 
   useEffect(()=>{
-    async function loadLists(){
+    
+    async function loadCategorys(){
       const params = {
         currentPage: 1,
-        pageSize: 10,
+        pageSize: 100,
       };
-      const res = await httpApis.course.GetLists(params);
-      setLists(res.data); // 假設 `res` 是符合 Antd Table 格式的數據
+      const res = await httpApis.category.GetCategorys(params);
+      const options = res.data.map(res=>{
+        return {
+          label:res.name,
+          value:res.id
+        }
+      })
+      console.log('options',options);
+      
+      setCategoryOptions(options);
     };
 
     // 調用異步函數
     loadLists();
+    loadCategorys()
   },[])
+
+  async function loadLists(){
+    const params = {
+      currentPage: 1,
+      pageSize: 10,
+    };
+    const res = await httpApis.course.GetLists(params);
+    setLists(res.data); // 假設 `res` 是符合 Antd Table 格式的數據
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [form] = Form.useForm(); // 使用useForm鉤子
+  function toggleModal(){
+    setIsModalOpen(!isModalOpen);
+    form.resetFields()
+  }
+  async function validateForm(){
+    try {
+      const values = await form.validateFields();
+      return values; // 驗證成功，返回表單值
+    } catch {
+      return false; // 驗證失敗返回 false
+    }
+  };
+  async function handleOk(){
+    const values = await validateForm();
+    
+    if (values){
+      const res = await httpApis.course.AddCourse(values);
+      if(res.status===201){
+        message.success('新增成功！');
+        loadLists()
+      }
+      form.resetFields(); // 重置表單
+      toggleModal(false); // 關閉 Modal
+    } 
+  }
+
+
+  function handleChange(){
+
+  }
 
   return (
   <>
+    <Button onClick={toggleModal}>新增</Button>
     <Table dataSource={lists} rowKey="id">
       <Column title="課程名稱" dataIndex="name" key="name" />
       <Column title="課程類別" dataIndex="categoryId" key="categoryId" />
@@ -70,6 +124,39 @@ const List = ()=>{
         )}
       />
     </Table>
+    {/* 彈窗 */}
+    <Modal
+      title="新增" 
+      open={isModalOpen} 
+      onOk={handleOk} 
+      onCancel={toggleModal}
+    >
+      <Form  validateTrigger="onBlur"
+        form={form} // 將 form 綁定到 Form 組件
+        labelCol={{span: 4,}}
+        wrapperCol={{span: 14,}}
+        layout="horizontal"
+        style={{maxWidth: 600}}
+      >
+        {/*課程名稱*/}
+        <Form.Item label="課程名稱" name="name" 
+          rules={[{required:true,message:"請輸入課程名稱"}]}
+        >
+          <Input></Input>
+        </Form.Item>
+        
+        {/* 課程類別 */}
+        <Form.Item label="課程類別" name="categoryId" rules={[{required:true,message:"請選擇課程名稱"}]}>
+          {/* <InputNumber /> */}
+          <Select
+            placeholder="請選擇類別"
+            style={{width: 120}}
+            onChange={handleChange}
+            options={categoryOptions}
+          />
+        </Form.Item>
+      </Form>
+    </Modal>
   </>
   )
 }

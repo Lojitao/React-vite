@@ -1,10 +1,11 @@
 import user from './user'
 import course from './course'
-
+import category from './category'
 
 const httpApis = {
   user,
-  course
+  course,
+  category
 }
 
 export default httpApis

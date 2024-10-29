@@ -8,6 +8,13 @@ const user = {
       method:'GET',
       params
     })
+  },
+  AddCourse(data){
+    return axiosInstance({
+      url:"/admin/courses",
+      method:'POST',
+      data
+    })
   }
 }
 
