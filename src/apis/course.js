@@ -10,6 +10,13 @@ const user = {
       allowGlobalErrorHandling
     })
   },
+  GetCourseById(params,allowGlobalErrorHandling = true){
+    return axiosInstance({
+      url:`admin/courses/${params}`,
+      method:'GET',
+      allowGlobalErrorHandling
+    })
+  },
   AddCourse(data,allowGlobalErrorHandling = true){
     return axiosInstance({
       url:"/admin/courses",
@@ -17,7 +24,16 @@ const user = {
       data,
       allowGlobalErrorHandling
     })
-  }
+  },
+  UpdateCourse(params,data,allowGlobalErrorHandling = true){
+    return axiosInstance({
+      url:`admin/courses/${params}`,
+      method:'PUT',
+      data,
+      allowGlobalErrorHandling
+    })
+  },
+  
 }
 
 
