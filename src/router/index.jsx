@@ -1,5 +1,5 @@
 //此頁功能為配置路由
-import LayoutPage from "@/Layout";
+import LayoutPage from "@/layout";
 import Login from "@/pages/Login";
 import Home from "@/pages/Home";
 import List from "@/pages/List";

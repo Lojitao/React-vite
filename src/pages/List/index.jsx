@@ -3,6 +3,7 @@ import { useState,useEffect,useRef } from "react"
 import httpApis from '@/apis'
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import Pagination from "@/component/pagination"
 const { Column, ColumnGroup } = Table;
 const MySwal = withReactContent(Swal);
 
@@ -66,13 +67,15 @@ const List = ()=>{
     loadCategorys()
   },[])
 
+  const [listQuery,setListQuery] = useState({
+    currentPage: 1,
+    pageSize: 3,
+  })
+  const [total,setTotal] = useState(0)
   async function loadLists(){
-    const params = {
-      currentPage: 1,
-      pageSize: 10,
-    };
-    const res = await httpApis.course.GetLists(params);
-    setLists(res.data); // 假設 `res` 是符合 Antd Table 格式的數據
+    const {count,data} = await httpApis.course.GetLists(listQuery)
+    setLists(data)
+    setTotal(count)
   };
    //根據 categoryId 返回中文名稱
   const getCategoryName = (categoryId) => {
@@ -180,6 +183,11 @@ const List = ()=>{
         )}
       />
     </Table>
+    <Pagination 
+      limit={listQuery.pageSize} 
+      page={listQuery.currentPage}
+      total={total}
+    />
     {/* 彈窗 */}
     <Modal
       title={
@@ -191,7 +199,7 @@ const List = ()=>{
       onCancel={closeModal}
       footer={modalFooter} // 使用動態生成的按鈕組
     >
-      <Form  validateTrigger="onBlur"
+      <Form validateTrigger="onBlur"
         form={form} // 將 form 綁定到 Form 組件
         labelCol={{span: 4,}}
         wrapperCol={{span: 14,}}
