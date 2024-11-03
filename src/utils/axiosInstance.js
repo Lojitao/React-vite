@@ -1,6 +1,6 @@
 //axios封裝處理
 import axios from 'axios'
-import { getCookie } from "@/utils"
+import { getCookie,removeCookie } from "@/utils"
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
@@ -50,9 +50,11 @@ axiosInstance.interceptors.response.use(
           confirmButtonText: '好的',
         }).then(() => {
           console.log('跳轉到登入頁');
-          
+          removeCookie('token')
           // TODO:可在此處執行跳轉到登入頁的邏輯
           // redirectToLogin(); // 使用自定義的跳轉函數
+          // router.navigate('/login')
+          window.location.reload()
         });
       }  
       if (errors && errors.length > 0) {// 具體錯誤訊息

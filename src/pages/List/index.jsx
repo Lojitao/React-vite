@@ -7,38 +7,13 @@ import Pagination from "@/component/pagination"
 const { Column, ColumnGroup } = Table;
 const MySwal = withReactContent(Swal);
 
-
-//渲染後取得資料
-
-const data = [
-  {
-    key: '1',
-    firstName: 'John',
-    lastName: 'Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-    tags: ['nice', 'developer'],
-  },
-  {
-    key: '2',
-    firstName: 'Jim',
-    lastName: 'Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-    tags: ['loser'],
-  },
-  {
-    key: '3',
-    firstName: 'Joe',
-    lastName: 'Black',
-    age: 32,
-    address: 'Sydney No. 1 Lake Park',
-    tags: ['cool', 'teacher'],
-  },
-];
-
 const List = ()=>{
   const [lists,setLists] = useState([])
+  const [total,setTotal] = useState(0)
+  const [listQuery,setListQuery] = useState({
+    currentPage: 1,
+    pageSize: 3,
+  })
   const [categoryOptions,setCategoryOptions] = useState([])
 
   useEffect(()=>{
@@ -63,17 +38,12 @@ const List = ()=>{
     };
 
     // 調用異步函數
-    loadLists();
+    loadLists(listQuery);
     loadCategorys()
   },[])
 
-  const [listQuery,setListQuery] = useState({
-    currentPage: 1,
-    pageSize: 3,
-  })
-  const [total,setTotal] = useState(0)
-  async function loadLists(){
-    const {count,data} = await httpApis.course.GetLists(listQuery)
+  async function loadLists(query){
+    const {count,data} = await httpApis.course.GetLists(query)
     setLists(data)
     setTotal(count)
   };
@@ -126,7 +96,7 @@ const List = ()=>{
             timerProgressBar: true,  
             showConfirmButton: false
           })
-          loadLists()
+          loadLists(listQuery)
         }
       }catch(error){
         console.log('error',error);
@@ -147,6 +117,16 @@ const List = ()=>{
       }
     }    
   }
+  const handlePageChange = (page) => {
+    console.log('page',page);
+    
+    const updatedQuery = {
+      ...listQuery,
+      currentPage: page,
+    };
+    setListQuery(updatedQuery);
+    loadLists(updatedQuery)
+  };
 
   // 動態生成 Modal 底部按鈕
   const modalFooter = [
@@ -184,6 +164,7 @@ const List = ()=>{
       />
     </Table>
     <Pagination 
+      onPageChange={handlePageChange} 
       limit={listQuery.pageSize} 
       page={listQuery.currentPage}
       total={total}

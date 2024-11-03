@@ -1,46 +1,77 @@
-import React, { memo } from 'react';
+import React, { memo,useEffect,useState } from 'react';
 
-const Pagination = memo(({ limit, page,total}) => {
-  console.log('limit', limit);
-  console.log('page', page);
-  console.log('total', total);
+const Pagination = memo(({ limit, page,total,onPageChange}) => {
+  const pageRender = 2; // 每次渲染的頁碼按鈕數
+  const pageTotal = Math.ceil(total / limit); // 總頁數
+  const [pageGroup, setPageGroup] = useState([]); // 儲存頁碼分組
+  
+  useEffect(()=>{
+    let pageData = []; // 用來儲存頁碼分組
 
-  const pageRender = 3; // 每次渲染 7 個頁碼按鈕
-  const pageTotal = Math.ceil(total / limit); // 計算總頁數
-  const pageData = []; // 儲存分組的頁數按鈕
-  // const [pageGroup,setPageGroup] = useState([])
-  console.log('pageTotal',pageTotal);
-  if(pageTotal>pageRender){
-    for(let currentPage = 1 ; currentPage <= pageTotal ; currentPage+=pageRender){
+    if(pageTotal>pageRender){//大於一頁碼數組
+      for(let currentPage = 1 ; currentPage <= pageTotal ; currentPage+=pageRender){
+        let group = []
+
+        //製作頁數組
+        for(let groupLoopTime = 0 ; currentPage+groupLoopTime<=pageTotal && groupLoopTime<pageRender; groupLoopTime++){
+          group.push(currentPage+groupLoopTime)
+        }
+        //製作最後一頁數組
+        if(group.length < pageRender){
+          const starPage = group[group.length-1]-(pageRender-1)   
+          group = Array.from({length:pageRender},(_,renderTime)=>starPage+renderTime)
+        }
+        pageData.push(group)
+      }
+    }
+    if(pageTotal<=pageRender){//只有一頁碼數組
       let group = []
-      
-      for(let groupLoopTime = 0 ; currentPage+groupLoopTime<=pageTotal && groupLoopTime<pageRender; groupLoopTime++){
-        group.push(currentPage+groupLoopTime)
-      }
-      //最後一頁數組
-      if(group.length < pageRender){
-        const starPage = group[group.length-1]-(pageRender-1)
-        console.log('starPage',starPage);
-        
-        group = Array.from({length:pageRender},(_,renderTime)=>starPage+renderTime)
-      }
+      const currentPage = 1
+      group = Array.from({length:pageTotal},(_,renderTime)=>currentPage+renderTime)
       pageData.push(group)
     }
-    // setPageGroup(pageData)
+
+    setPageGroup(pageData)
+  },[limit,page,total])
+
+  const [currentPageGroupIdx, setCurrentPageGroupIdx] = useState(0); // 初始化渲染頁碼數組
+  function prePageGroup(){
+    if(currentPageGroupIdx > 0)setCurrentPageGroupIdx(currentPageGroupIdx-1)
   }
-  if(pageTotal<=pageRender){
-    let group = []
-    const currentPage = 1
-    group = Array.from({length:pageTotal},(_,renderTime)=>currentPage+renderTime)
-    pageData.push(group)
-    // setPageGroup(pageData)
+  function nextPageGroup(){  
+    if(currentPageGroupIdx < pageGroup.length-1)setCurrentPageGroupIdx(currentPageGroupIdx+1)
   }
 
-  console.log('pageData',pageData);
-  
   return (
     <>
-      <p>sadc</p>
+      <div className='flex gap-2 justify-center'>
+        <div className='w-20px flex justify-center'>
+          {currentPageGroupIdx > 0 && (
+            <div onClick={prePageGroup} className='hover:cursor-pointer'>
+              ...
+            </div>
+          )}
+        </div>
+        <div>
+          {pageGroup.map((groupItem,groupIdx)=>(
+            currentPageGroupIdx === groupIdx && (
+            <React.Fragment key={groupIdx}>
+              {groupItem.map(pageBtn=>
+                <button key={pageBtn} className='w-30px'
+                  onClick={()=>onPageChange(pageBtn)}
+                >{pageBtn}
+                </button>
+              )}  
+            </React.Fragment>
+            )
+          ))}
+        </div>
+        <div className='w-20px flex justify-center'>
+          {currentPageGroupIdx < pageGroup.length-1 && (
+            <div onClick={nextPageGroup} className='hover:cursor-pointer'>...</div>
+          )}
+        </div>
+      </div>
     </>
   );
 });
