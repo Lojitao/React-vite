@@ -8,4 +8,14 @@ export default defineConfig({
     presetAttributify(), // 可选：支持属性模式 (e.g., <div text="sm white" />)
     presetIcons(), // 可选：支持图标
   ],
+  theme: {
+    extend: {
+      aspectRatio: {
+        '1/1': '1 / 1',
+        '16/9': '16 / 9',
+        '4/3': '4 / 3',
+        '4/2': '4 / 2',
+      },
+    },
+  },
 });

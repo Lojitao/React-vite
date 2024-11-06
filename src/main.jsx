@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'//引入reduex
 
 import router from '@/router'//引入router配置檔案
 import {RouterProvider} from 'react-router-dom';//引入router provider
+import './index.css';          // 全域引入 reset CSS
 
 
 createRoot(document.getElementById('root')).render(

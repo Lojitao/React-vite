@@ -6,6 +6,7 @@ const category = {
     return axiosInstance({
       url:"/admin/category",
       method:'GET',
+      baseURL: import.meta.env.VITE_LOGIN_API,
       params
     })
   },

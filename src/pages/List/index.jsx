@@ -24,6 +24,8 @@ const List = ()=>{
         pageSize: 100,
       };
       const res = await httpApis.category.GetCategorys(params);
+      console.log('res',res);
+      
       const options = res.data.map(res=>{
         return {
           label:res.name,
@@ -117,9 +119,7 @@ const List = ()=>{
       }
     }    
   }
-  const handlePageChange = (page) => {
-    console.log('page',page);
-    
+  const handlePageChange = (page) => { 
     const updatedQuery = {
       ...listQuery,
       currentPage: page,

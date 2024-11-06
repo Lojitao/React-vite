@@ -8,11 +8,11 @@ const MySwal = withReactContent(Swal);
 
 //1.根域名配置/超時時間
 const axiosInstance = axios.create({
-  baseURL:'http://localhost:3039',
+  // baseURL:import.meta.env.VITE_BASE_API,
+  // baseURL:"https://giving.ntua.edu.tw/service/api",
+  baseURL: '/api', // 直接使用代理的前綴，不用寫完整域名
   timeout:5000
 })
-
-
 
 //2.請求攔截器/回應攔截器
 axiosInstance.interceptors.request.use(

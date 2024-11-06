@@ -4,13 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode dev",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.3.0",
+    "@unocss/preset-attributify": "^0.64.0",
+    "@unocss/preset-uno": "^0.64.0",
     "@unocss/reset": "^0.63.6",
     "@unocss/vite": "^0.63.6",
     "antd": "^5.21.5",

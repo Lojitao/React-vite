@@ -1,8 +1,8 @@
 import { Outlet, useNavigate , useLocation } from 'react-router-dom';
 import { Layout,Menu } from"antd"
 
-const { Header, Content, Footer, Sider } = Layout;
 
+const { Header, Content, Footer, Sider } = Layout;
 const items = [
   {
     label:'首頁',
@@ -31,16 +31,16 @@ const LayoutPage = ()=>{
 
   return (
     <>
-      <div className='flex'>
-        <Sider>
+      <div className='w-full'>
+        {/* <Sider>
           <div className="demo-logo-vertical" />
           <Menu onClick={routerHandle}
             selectedKeys={selectedKey}
             items={items} 
             theme="dark" mode="inline"  
           />
-        </Sider>
-        <div className="w-full bg-red h-100vh">
+        </Sider> */}
+        <div className="w-full max-w-[1240px] m-auto">
           <Outlet />
         </div>
       </div>
