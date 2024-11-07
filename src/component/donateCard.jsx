@@ -21,7 +21,7 @@ const DonateCard = ({itemCard})=>{
   }, [itemCard]);
 
   return (
-    <div className="flex flex-col w-30%">
+    <div className="w-[48%]">
         {
           !isImageReady? (// 取得資料及加載圖片完成前，都要顯示骨架屏
             <>

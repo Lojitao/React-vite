@@ -157,9 +157,7 @@ const Home = ()=>{
             pics,
             imgSrc: `${import.meta.env.VITE_BASE_IMG_URL}${parsedPics}`
           };
-        });
-        console.log('handleData',handleData);
-        
+        });  
         setNewsList(handleData)
       }
     })
@@ -168,7 +166,7 @@ const Home = ()=>{
   return (
     <div className="relative w-full h-screen m-auto">
       {/* {Banner} */}
-      {/* {loading ? (
+      {loading ? (
         <div className="w-full h-full flex items-center justify-center"> 
           <Skeleton.Image
             active
@@ -201,7 +199,7 @@ const Home = ()=>{
             ))}
           </Carousel>
         </>
-      )} */}
+      )}
       {/* 捐款Card */}
       {/* TODO:輪播 */}
       {/* TODO:不給flex，<Skeleton.Node/>就需要寫死寬度，但就會讓RWD初始載入時會有一瞬間顯示scrollBar */}
@@ -225,22 +223,21 @@ const Home = ()=>{
           )
         }
       </div>
-      {/* News，TODO:圖片做lazyLoad */}
-    
-        <div className="flex gap-4 flex-col">
-          {newsList.map((newsItem,index)=>{
-            return(
-              <div key={newsItem.id || index} className="flex gap-2">
-                <div className="w-1/4 aspect-4/2">
-                  <img className="w-full h-100% object-cover" src={newsItem.imgSrc} />
-                </div>
-                <div className="w-3/4">
-                  <p>{newsItem.title}</p>
-                  <p>{newsItem.summary}</p>
-                </div>
+      
+      <div className="flex gap-4 flex-col mt-20">
+        {newsList.map((newsItem,index)=>{
+          return(
+            <div key={newsItem.id || index} className="flex gap-2">
+              <div className="w-1/4 aspect-4/2">
+                <img className="w-full h-100% object-cover" src={newsItem.imgSrc} />
               </div>
-            )
-          })}
+              <div className="w-3/4">
+                <p>{newsItem.title}</p>
+                <p>{newsItem.summary}</p>
+              </div>
+            </div>
+          )
+        })}
         </div>
      
       {/* 芳名錄 */}
