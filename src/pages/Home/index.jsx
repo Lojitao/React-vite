@@ -55,18 +55,17 @@ const DonateTypeGroup = ({onChangeType})=>{
 const Home = ()=>{
   const [loading, setLoading] = useState(true);
   const [imageList, setImageList] = useState([]);
+  const [newsList, setNewsList] = useState([]);
   const carouselRef = useRef(null); // 使用 ref 來獲取 Carousel 實例
   const [cardList, setCardList] = useState([]);
  
   useEffect(() => {
     LoadBanners();
-    
-    loadDonateTypeList({ 
+    loadDonateList({ 
       API_NAME: 'Load', 
       typeId: '4b25e374-0f5e-415e-896e-c91423d9e375' 
     });
-    // setTimeout(() => {
-    // }, 3000);
+    loadNewsList()
   }, []);
 
   async function LoadBanners(){
@@ -94,7 +93,7 @@ const Home = ()=>{
     setImageList(handleData)
   };
 
-  async function loadDonateTypeList(item){
+  async function loadDonateList(item){
     const {API_NAME,typeId} = item
     let resList = []
 
@@ -118,7 +117,7 @@ const Home = ()=>{
       }
       const {data} = await httpApis.donateplanes[API_NAME](limitListQuery)
       const handleData = data.map(({pics,...other})=>{
-        let parsedPics;
+        let parsedPics = ""
         try {
           parsedPics = JSON.parse(pics)
         } catch (error) {
@@ -131,11 +130,39 @@ const Home = ()=>{
           imgSrc: `${import.meta.env.VITE_BASE_IMG_URL}${parsedPics}`
         };
       })
-      console.log('handleData',handleData);
-      
       resList = handleData
     }
     setCardList(resList)
+  }
+
+  function loadNewsList(){
+    let newsQuery={
+      page:1,
+      limit:999,
+      key:"",
+      orderby:"startDate desc"
+    }
+    httpApis.news.Load(newsQuery).then((res)=>{
+      const {code ,data} = res  
+      if(code===200){        
+        let parsedPics = ""
+        const handleData = data.map(({pics,...other})=>{
+          try {
+            parsedPics = JSON.parse(pics)
+          } catch (error) {
+            console.error("Failed to parse pics:", error);
+          }
+          return {
+            ...other,
+            pics,
+            imgSrc: `${import.meta.env.VITE_BASE_IMG_URL}${parsedPics}`
+          };
+        });
+        console.log('handleData',handleData);
+        
+        setNewsList(handleData)
+      }
+    })
   }
 
   return (
@@ -176,9 +203,10 @@ const Home = ()=>{
         </>
       )} */}
       {/* 捐款Card */}
+      {/* TODO:輪播 */}
       {/* TODO:不給flex，<Skeleton.Node/>就需要寫死寬度，但就會讓RWD初始載入時會有一瞬間顯示scrollBar */}
       <div className="flex flex-col"> 
-        <DonateTypeGroup onChangeType={loadDonateTypeList}/>
+        <DonateTypeGroup onChangeType={loadDonateList}/>
         {
           cardList.length===0?(<Skeleton.Node active
             style={{ 
@@ -197,7 +225,24 @@ const Home = ()=>{
           )
         }
       </div>
-      {/* News */}
+      {/* News，TODO:圖片做lazyLoad */}
+    
+        <div className="flex gap-4 flex-col">
+          {newsList.map((newsItem,index)=>{
+            return(
+              <div key={newsItem.id || index} className="flex gap-2">
+                <div className="w-1/4 aspect-4/2">
+                  <img className="w-full h-100% object-cover" src={newsItem.imgSrc} />
+                </div>
+                <div className="w-3/4">
+                  <p>{newsItem.title}</p>
+                  <p>{newsItem.summary}</p>
+                </div>
+              </div>
+            )
+          })}
+        </div>
+     
       {/* 芳名錄 */}
 
     </div>

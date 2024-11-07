@@ -3,13 +3,15 @@
 // import category from './category'
 import banner from './banner'
 import donateplanes from './donateplanes'
+import news from './news'
 
 const httpApis = {
   // user,
   // course,
   // category,
   banner,
-  donateplanes
+  donateplanes,
+  news
 }
 
 export default httpApis
